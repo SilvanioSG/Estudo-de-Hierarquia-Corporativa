@@ -1,0 +1,1900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Estudo de Hierarquia Corporativa Completo | Silvanio Gois</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* 1. VARIÁVEIS DE DESIGN PROFISSIONAL */
+    :root{
+      --brand: rgb(39, 98, 141); /* Azul Principal */
+      --accent: #00bcd4; /* Azul Claro/Ciano para Destaque (Substituto do azul escuro do card) */
+      --bg: #f4f6f8;
+      --card-bg: #ffffff;
+      --secondary-text: #1d3648; /* Cor de Título */
+      --muted: #6b7280; /* Cinza para Corpo de Texto Secundário */
+      --neutral: #e5e7eb; /* Cor de Borda e Divisores */
+      --border: rgba(39,98,141,0.12);
+      --radius: 12px;
+      --shadow: 0 10px 30px rgba(2,6,23,0.06);
+      --maxw: 1200px;
+    }
+
+    /* Reset Básico */
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      /* Fonte Poppins para um visual moderno */
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--secondary-text);
+      line-height: 1.6;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* 2. HEADER E INTRODUÇÃO */
+    header.app-header{
+      background: var(--brand);
+      color: #fff;
+      padding: 30px 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+    .header-inner{
+      width:100%;
+      max-width: var(--maxw);
+      margin: 0 auto;
+      display:flex;
+      gap:20px;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .brand-left{
+      display:flex;
+      gap:16px;
+      align-items:center;
+    }
+    .brand-left img{
+      width:60px; 
+      height:60px;
+      border-radius:50%;
+      object-fit:cover;
+      border:3px solid rgba(255,255,255,0.7);
+    }
+    .brand-title{
+      line-height:1.2;
+    }
+    .brand-title h1{
+      margin:0;
+      font-size:1.8rem;
+      font-weight:700;
+    }
+    .brand-title p{
+      margin:5px 0 0;
+      font-size:0.95rem;
+      opacity:0.9;
+    }
+    .header-actions a{
+      color:var(--accent);
+      text-decoration:none;
+      font-weight:600;
+      padding:8px 15px;
+      border:1px solid var(--accent);
+      border-radius:8px;
+      transition: background 0.3s;
+    }
+    .header-actions a:hover {
+        background: rgba(255,255,255,0.1);
+        color: white;
+        border-color: white;
+    }
+
+    /* Main container */
+    main.container{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 0 20px 40px;
+    }
+    
+    .intro{
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border:1px solid var(--neutral);
+      margin-bottom: 30px;
+    }
+    .intro h2{
+      margin:0 0 8px 0;
+      color:var(--brand);
+      font-size: 1.5rem;
+      font-weight: 600;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 5px;
+    }
+    .intro p{ margin:0; color:var(--muted); font-size:0.95rem; }
+
+    /* 3. ESTRUTURA DE HIERARQUIA: SETOR E NÍVEL */
+    .sector{
+      margin-bottom: 30px;
+    }
+
+    /* Cabeçalho do Setor - Usado como button com ARIA */
+    .sector > .sector-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-top:25px;
+      background: var(--card-bg);
+      padding:15px 20px;
+      border-radius: var(--radius);
+      border:1px solid var(--neutral);
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      transition: background-color 0.2s;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .sector-header:hover {
+        background: #f8faff;
+    }
+    .sector-header .left{
+      display:flex;
+      gap:15px;
+      align-items:center;
+    }
+    .sector-header h3{ margin:0; color:var(--secondary-text); font-size:1.3rem; font-weight: 600; }
+    .sector-header p{ margin:0; font-size:0.9rem; color:var(--muted) }
+    .sector-header .icon-sector {
+        font-size: 1.5rem;
+        color: var(--accent);
+        transition: transform 0.3s ease;
+    }
+    .sector-header[aria-expanded="true"] .icon-sector {
+        transform: rotate(90deg);
+    }
+    .sector-header .toggle-text {
+        color: var(--accent);
+        font-weight: 600;
+        transition: color 0.2s;
+    }
+    .sector-header:hover .toggle-text {
+        color: var(--brand);
+    }
+
+    /* Container de Níveis - Melhoria de transição com max-height */
+    .levels{
+      margin-top:15px;
+      padding: 0 5px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .sector-open > .levels {
+        max-height: 4000px;
+    }
+
+    .level{
+      margin-top:10px;
+      background: #fff;
+      border-radius: var(--radius);
+      border:1px solid var(--neutral);
+      overflow: hidden;
+    }
+    /* Cabeçalho do Nível - Usado como button com ARIA */
+    .level-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+      padding:12px 18px;
+      background: #fcfcfc;
+      border-bottom: 1px solid var(--neutral);
+      transition: background-color 0.2s;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .level-header:hover {
+        background: #f7f7f7;
+    }
+    .level-header .title{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .level-header h4{
+      margin:0;
+      font-size:1rem;
+      color: var(--secondary-text);
+      font-weight: 400;
+    }
+    .level-header span.hl{
+      background:var(--brand);
+      color:white;
+      padding:4px 10px;
+      font-size:0.85rem;
+      border-radius:8px;
+      font-weight:600;
+    }
+    .level-header .toggle-icon{
+        font-size: 1.2rem;
+        color: var(--brand);
+        transition: transform 0.3s ease;
+    }
+    .level-header[aria-expanded="true"] .toggle-icon {
+        transform: rotate(90deg);
+    }
+
+    /* Wrapper do Grid de Cartões - Melhoria de transição com max-height */
+    .card-grid-wrapper {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background: #fcfcfc;
+    }
+    .level-open .card-grid-wrapper {
+        max-height: 1500px;
+    }
+    .card-grid{
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap:15px;
+      padding:15px 18px;
+    }
+
+    /* 4. CARTÃO DE PAPEL (ROLE CARD) */
+    .role-card{
+      background:var(--card-bg);
+      border-radius:10px;
+      padding:15px;
+      border:1px solid var(--border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s;
+      cursor:pointer;
+      position:relative;
+      min-height:90px;
+    }
+    .role-card:hover{
+      transform:translateY(-2px);
+      box-shadow: 0 8px 20px rgba(2,6,23,0.08);
+      border-color: var(--accent);
+    }
+    .role-card[aria-expanded="true"]{
+        border-color: var(--accent);
+        background: #f8faff;
+        box-shadow: 0 0 0 1px var(--accent);
+    }
+    .role-card[aria-expanded="true"] .role-icon{
+        transform: rotate(6deg);
+    }
+
+    .role-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .role-left{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      flex:1;
+    }
+    .role-icon{
+      width:40px;
+      height:40px;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.2rem;
+      background: linear-gradient(180deg, rgba(39,98,141,0.1), rgba(39,98,141,0.05));
+      color:var(--brand);
+      flex-shrink:0;
+      transition: transform 0.2s ease;
+    }
+
+    .role-meta{
+      min-width:0;
+    }
+    .role-meta b{ display:block; font-size:1rem; color:var(--secondary-text); line-height:1.2; }
+    .role-meta span{ display:block; font-size:0.8rem; color:var(--muted); margin-top:2px; }
+
+    .role-short{
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--accent);
+        flex-shrink: 0;
+        min-width: 90px;
+        text-align: right;
+    }
+    
+    /* Conteúdo Colapsado - Detalhes */
+    .role-details{
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease-out, opacity 0.3s ease-out;
+      border-top: 1px dashed var(--neutral);
+      margin-top: 12px;
+      padding-top: 12px;
+      color:var(--secondary-text);
+      font-size:0.9rem;
+      line-height:1.4;
+    }
+    .role-card[aria-expanded="true"] .role-details{
+      max-height: 500px; 
+      opacity: 1;
+      transition: max-height 0.5s ease-in, opacity 0.3s ease-in 0.1s;
+    }
+
+    .role-details p{ margin:6px 0; }
+    .role-details p strong{ color: var(--brand); font-weight: 600; }
+    .role-details .small{ font-size:0.8rem; color:var(--muted) }
+
+    /* footer */
+    footer.app-footer{
+      margin-top:28px;
+      padding:18px 12px;
+      background:var(--brand);
+      color:white;
+      text-align:center;
+    }
+    footer a{
+      color:var(--accent);
+      text-decoration:underline;
+      font-weight:600;
+    }
+
+    /* Responsividade */
+    @media (max-width:768px){
+      .brand-title h1{ font-size:1.5rem }
+      .brand-left img{ width:50px; height:50px }
+      .header-actions{ width:100%; text-align:left; margin-top:10px; }
+      .sector-header h3{ font-size:1.1rem; }
+      .sector-header p{ display:none; }
+      .role-top{ flex-direction: column; align-items: flex-start; }
+      .role-short{ text-align: left; margin-top: 5px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header" role="banner">
+    <div class="header-inner">
+      <div class="brand-left" aria-hidden="false">
+        <img src="SG_Executivo-removebg-preview.png" alt="Foto Silvanio Gois">
+        <div class="brand-title">
+          <h1>Estudo de Hierarquia Corporativa</h1>
+          <p><strong>Silvanio Gois</strong> — Estrutura, funções e exemplos práticos</p>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="https://www.silvaniogois.com.br/" target="_blank" rel="noopener">Ir ao Site</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container" role="main">
+    <section class="intro" aria-labelledby="intro-title">
+      <h2 id="intro-title">Resumo do Estudo</h2>
+      <p>Documento interativo que apresenta a hierarquia por setores (do nível estratégico ao operacional) com cartões compactos que expandem para exibir função e exemplo de ação. Clique nos títulos de nível para abrir/fechar todo o grupo; clique em um card para ver detalhes.</p>
+    </section>
+
+    <section class="sector" data-sector="administracao" aria-labelledby="adm-title">
+      <button class="sector-header" id="header-adm" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-adm">
+        <div class="left">
+          <span class="icon-sector">🏛️</span>
+          <div>
+            <h3 id="adm-title">Administração</h3>
+            <p>Governança, planejamento estratégico, compliance e gestão administrativa.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-adm">
+        <div class="level" data-level="alta-adm">
+          <button class="level-header" id="header-alta-adm" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-adm">
+            <div class="title"><span class="hl">Alta Administração</span><h4> (C-Level & Diretores)</h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-adm">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">👔</div>
+                    <div class="role-meta">
+                      <b>CEO — Chief Executive Officer</b>
+                      <span>Diretor Executivo / Presidente</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Visão & estratégia</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Define visão, estratégia corporativa e a direção de longo prazo.</p>
+                  <p><strong>Exemplo:</strong> Aprovar plano estratégico quinquenal e validar aquisição de concorrente.</p>
+                  <p class="small">Interação direta com Conselho e principais stakeholders.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">⚙️</div>
+                    <div class="role-meta">
+                      <b>COO — Chief Operating Officer</b>
+                      <span>Diretor de Operações</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Execução operacional</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Garante eficiência operacional, entrega e qualidade dos serviços/produtos.</p>
+                  <p><strong>Exemplo:</strong> Liderar iniciativa de redução de custo operacional em 12% mantendo SLA.</p>
+                  <p class="small">Foco em processos e performance.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧭</div>
+                    <div class="role-meta">
+                      <b>CAO — Chief Administrative Officer</b>
+                      <span>Diretor Administrativo</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Governança interna</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Supervisiona funções administrativas, facilities, contratos e compliance interno.</p>
+                  <p><strong>Exemplo:</strong> Implantar política centralizada de contratos e otimizar gastos de facilities.</p>
+                  <p class="small">Coordena equipes de apoio administrativo e jurídico-administrativo.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-adm">
+          <button class="level-header" id="header-diretoria-adm" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-adm">
+            <div class="title"><span class="hl">Diretoria / Gerência</span><h4> (Diretores & Gerentes)</h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-adm">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📋</div>
+                    <div class="role-meta">
+                      <b>Diretor Administrativo</b>
+                      <span>Administrative Director</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Políticas e processos</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Desenhar políticas internas, supervisão de contratos e facilities.</p>
+                  <p><strong>Exemplo:</strong> Revisar contratos com fornecedores e implementar KPI de compliance.</p>
+                  <p class="small">Interface com jurídico, compras e TI para políticas internas.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📆</div>
+                    <div class="role-meta">
+                      <b>Gerente de Projetos (PM)</b>
+                      <span>Project Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Entrega de projetos</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Planejar e executar projetos, gerenciar escopo, prazo e custo.</p>
+                  <p><strong>Exemplo:</strong> Coordenar rollout de ERP e treinar equipes locais.</p>
+                  <p class="small">Relaciona-se com TI, Operações e Finanças.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🛡️</div>
+                    <div class="role-meta">
+                      <b>Analista de Compliance</b>
+                      <span>Compliance Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Conformidade</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Monitorar processos, riscos e assegurar aderência a normas.</p>
+                  <p><strong>Exemplo:</strong> Implementar controles anti-fraude e conduzir auditorias internas.</p>
+                  <p class="small">Interface com Jurídico, Financeiro e RH.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="supervisao-adm">
+          <button class="level-header" id="header-supervisao-adm" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-supervisao-adm">
+            <div class="title"><span class="hl">Supervisão / Coordenação</span><h4> (Coordenadores & Supervisores)</h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-supervisao-adm">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🗂️</div>
+                    <div class="role-meta">
+                      <b>Coordenador Administrativo</b>
+                      <span>Team Coordinator</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Rotinas administrativas</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Coordenar equipe de apoio, contratos menores e rotinas bancárias.</p>
+                  <p><strong>Exemplo:</strong> Consolidar extratos e preparar documentação para auditoria.</p>
+                  <p class="small">Apoia gerência e equipes operacionais.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Assistente Administrativo Sênior</b>
+                      <span>Senior Administrative Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Apoio tático</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Preparar relatórios gerenciais e coordenar agenda executiva.</p>
+                  <p><strong>Exemplo:</strong> Preparar apresentações mensais para diretoria.</p>
+                  <p class="small">Contato frequente com todas as áreas.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="operacional-adm">
+          <button class="level-header" id="header-operacional-adm" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-operacional-adm">
+            <div class="title"><span class="hl">Nível Operacional</span><h4> (Assistentes & Auxiliares)</h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-operacional-adm">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📎</div>
+                    <div class="role-meta">
+                      <b>Assistente Administrativo</b>
+                      <span>Administrative Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Execução diária</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Apoiar processos, arquivo, atendimento e controle documental.</p>
+                  <p><strong>Exemplo:</strong> Registrar notas fiscais e organizar arquivos físicos/digitais.</p>
+                  <p class="small">Peça-chave para rotina fluida do escritório.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧰</div>
+                    <div class="role-meta">
+                      <b>Auxiliar Administrativo</b>
+                      <span>Administrative Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Suporte</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Realizar tarefas de apoio, entrada de dados e logística interna.</p>
+                  <p><strong>Exemplo:</strong> Controlar estoque de material de escritório e suporte a eventos internos.</p>
+                  <p class="small">Perfil operacional e de suporte.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="financas" aria-labelledby="fin-title">
+      <button class="sector-header" id="header-fin" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-fin">
+        <div class="left">
+          <span class="icon-sector">💰</span>
+          <div>
+            <h3 id="fin-title">Finanças</h3>
+            <p>Planejamento financeiro, controladoria, tesouraria e contabilidade.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-fin">
+        <div class="level" data-level="alta-fin">
+          <button class="level-header" id="header-alta-fin" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-fin">
+            <div class="title"><span class="hl">Alta Administração</span><h4> (C-Level)</h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-fin">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📊</div>
+                    <div class="role-meta">
+                      <b>CFO — Chief Financial Officer</b>
+                      <span>Diretor Financeiro</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Gestão financeira</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar finanças, planejamento, análise e relacionamento com investidores.</p>
+                  <p><strong>Exemplo:</strong> Aprovar orçamento anual, projeções e estratégia tributária.</p>
+                  <p class="small">Alta interação com CEO e Auditoria.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Controller / CAO</b>
+                      <span>Controlador / Diretor de Contabilidade</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Relatórios e compliance</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Assegurar conformidade contábil, relatórios financeiros e fechamento mensal.</p>
+                  <p><strong>Exemplo:</strong> Fechamento contábil, conciliações e demonstrações financeiras.</p>
+                  <p class="small">Foco em auditoria e compliance fiscal.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-fin">
+          <button class="level-header" id="header-diretoria-fin" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-fin">
+            <div class="title"><span class="hl">Diretoria / Gerência</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-fin">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📈</div>
+                    <div class="role-meta">
+                      <b>Gerente Financeiro</b>
+                      <span>Finance Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Orçamento e reports</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar orçamento, forecasting e indicadores financeiros.</p>
+                  <p><strong>Exemplo:</strong> Preparar forecast trimestral e reportar desvios à diretoria.</p>
+                  <p class="small">Relaciona-se com todas as áreas para consolidar números.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🏦</div>
+                    <div class="role-meta">
+                      <b>Gerente de Tesouraria</b>
+                      <span>Treasury Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Fluxo de caixa</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerir caixa, liquidez e relacionamento bancário.</p>
+                  <p><strong>Exemplo:</strong> Otimizar linhas de crédito e negociar tarifas bancárias.</p>
+                  <p class="small">Foco em fluxo e capital de giro.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Coordenador Fiscal</b>
+                      <span>Tax Coordinator</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Tributação</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Garantir conformidade tributária, apurações e obrigações acessórias.</p>
+                  <p><strong>Exemplo:</strong> Preparar SPED, DARFs e analisar impacto tributário em operações.</p>
+                  <p class="small">Altamente integrado à contabilidade.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-fin">
+          <button class="level-header" id="header-oper-fin" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-fin">
+            <div class="title"><span class="hl">Supervisão / Operacional</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-fin">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🔎</div>
+                    <div class="role-meta">
+                      <b>Analista Financeiro</b>
+                      <span>Financial Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Análises e controles</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Produzir análises financeiras, custo por centro e reports.</p>
+                  <p><strong>Exemplo:</strong> Criar dashboards de margem por produto para suporte a decisões.</p>
+                  <p class="small">Trabalha com FP&A e BI.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Analista Contábil</b>
+                      <span>Accounting Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Lançamentos e concil.</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Lançamentos contábeis, conciliações e suporte a auditorias.</p>
+                  <p><strong>Exemplo:</strong> Realizar conciliação bancária e suporte no fechamento mensal.</p>
+                  <p class="small">Base para relatórios oficiais.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📥</div>
+                    <div class="role-meta">
+                      <b>Analista AP / AR</b>
+                      <span>Accounts Payable / Receivable</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Contas a pagar/receber</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar entradas e saídas financeiras, cobranças e pagamentos.</p>
+                  <p><strong>Exemplo:</strong> Lançar títulos, conferir notas e realizar follow-up de cobranças.</p>
+                  <p class="small">Rotina crítica para caixa.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="rh" aria-labelledby="rh-title">
+      <button class="sector-header" id="header-rh" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-rh">
+        <div class="left">
+          <span class="icon-sector">🧑‍🤝‍🧑</span>
+          <div>
+            <h3 id="rh-title">Recursos Humanos (RH)</h3>
+            <p>Gestão de pessoas, recrutamento, desenvolvimento e políticas de RH.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-rh">
+        <div class="level" data-level="alta-rh">
+          <button class="level-header" id="header-alta-rh" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-rh">
+            <div class="title"><span class="hl">Alta Administração</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-rh">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧭</div>
+                    <div class="role-meta">
+                      <b>CHRO — Chief Human Resources Officer</b>
+                      <span>Diretor de RH</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Estratégia de pessoas</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar estratégia de talentos, cultura e planos de sucessão.</p>
+                  <p><strong>Exemplo:</strong> Aprovar plano de sucessão executivo e revisar políticas de remuneração.</p>
+                  <p class="small">Parceria direta com CEO e lideranças.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-rh">
+          <button class="level-header" id="header-diretoria-rh" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-rh">
+            <div class="title"><span class="hl">Diretoria / Gerência</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-rh">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">👩‍💼</div>
+                    <div class="role-meta">
+                      <b>Gerente de RH</b>
+                      <span>HR Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Operacional & estratégico</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Coordenar recrutamento, folha, benefícios e desenvolvimento.</p>
+                  <p><strong>Exemplo:</strong> Conduzir campanha de recrutamento para 50 vagas em 3 meses.</p>
+                  <p class="small">Foco em indicadores de turnover e engagement.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🔎</div>
+                    <div class="role-meta">
+                      <b>TA — Talent Acquisition</b>
+                      <span>Aquisição de Talentos</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Recrutamento</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Atração e seleção de talentos, employer branding.</p>
+                  <p><strong>Exemplo:</strong> Implementar programa de campus recruiting e reduzir time-to-hire.</p>
+                  <p class="small">Trabalha com gestores para definir perfil.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📚</div>
+                    <div class="role-meta">
+                      <b>L&D — Learning & Development</b>
+                      <span>Treinamento e Desenvolvimento</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Capacitação</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Desenvolver programas de formação e liderança.</p>
+                  <p><strong>Exemplo:</strong> Criar trilhas de aprendizagem para novos líderes.</p>
+                  <p class="small">Mede impacto via evolução de performance.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-rh">
+          <button class="level-header" id="header-oper-rh" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-rh">
+            <div class="title"><span class="hl">Supervisão / Operacional</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-rh">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Analista de RH</b>
+                      <span>HR Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Folha & benefícios</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Processos de folha, benefícios e rotinas trabalhistas.</p>
+                  <p><strong>Exemplo:</strong> Processar folha e esclarecer consultas de colaboradores.</p>
+                  <p class="small">Alta rotina e atenção a prazos legais.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">⚖️</div>
+                    <div class="role-meta">
+                      <b>Especialista Cargos & Salários</b>
+                      <span>Comp & Benefits Specialist</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Remuneração</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Estruturar planos de cargos, faixas salariais e benefícios.</p>
+                  <p><strong>Exemplo:</strong> Redesenhar grade salarial para reduzir gaps internos.</p>
+                  <p class="small">Impacto direto em retenção de talentos.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="marketing" aria-labelledby="mk-title">
+      <button class="sector-header" id="header-mk" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-mk">
+        <div class="left">
+          <span class="icon-sector">📣</span>
+          <div>
+            <h3 id="mk-title">Marketing & Comunicação</h3>
+            <p>Posicionamento, performance, brand e comunicação externa.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-mk">
+        <div class="level" data-level="alta-mk">
+          <button class="level-header" id="header-alta-mk" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-mk">
+            <div class="title"><span class="hl">Alta Administração / Direção</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-mk">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🎯</div>
+                    <div class="role-meta">
+                      <b>CMO — Chief Marketing Officer</b>
+                      <span>Diretor de Marketing</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Brand & growth</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Criar estratégia de marca, comunicação e crescimento de demanda.</p>
+                  <p><strong>Exemplo:</strong> Lançar campanha institucional e aprovar budget anual de mídia.</p>
+                  <p class="small">Trabalha próximo a vendas e produto.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">✍️</div>
+                    <div class="role-meta">
+                      <b>Head de Conteúdo / Comunicação</b>
+                      <span>Head of Communications</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Conteúdo & PR</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerir conteúdo institucional, PR e estratégia editorial.</p>
+                  <p><strong>Exemplo:</strong> Coordenar assessoria de imprensa em lançamento de produto.</p>
+                  <p class="small">Importante para imagem pública da empresa.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-mk">
+          <button class="level-header" id="header-oper-mk" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-mk">
+            <div class="title"><span class="hl">Operacional / Tático</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-mk">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">💻</div>
+                    <div class="role-meta">
+                      <b>Analista de Marketing Digital</b>
+                      <span>Digital Marketing Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Mídia & performance</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Planejar e executar campanhas digitais, otimizar performance e analisar ROI.</p>
+                  <p><strong>Exemplo:</strong> Ajustar campanhas de Google/Meta para reduzir CAC em 18%.</p>
+                  <p class="small">Medição via KPI e dashboards.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📱</div>
+                    <div class="role-meta">
+                      <b>Social Media / Community Manager</b>
+                      <span>CM / Community</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Engajamento</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar canais sociais e relacionamento com comunidade.</p>
+                  <p><strong>Exemplo:</strong> Criar calendário editorial e responder dúvidas públicas em redes.</p>
+                  <p class="small">Impacto direto em percepção de marca.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🔎</div>
+                    <div class="role-meta">
+                      <b>Analista de SEO</b>
+                      <span>SEO Specialist</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Orgânico</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Otimizar presença orgânica no Google, análise de keywords e estrutura do site.</p>
+                  <p><strong>Exemplo:</strong> Melhorar ranking de páginas estratégicas e aumentar tráfego orgânico.</p>
+                  <p class="small">Colabora com conteúdo e TI.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="ti" aria-labelledby="ti-title">
+      <button class="sector-header" id="header-ti" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-ti">
+        <div class="left">
+          <span class="icon-sector">💻</span>
+          <div>
+            <h3 id="ti-title">Tecnologia da Informação (TI)</h3>
+            <p>Infraestrutura, segurança, desenvolvimento e dados.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-ti">
+        <div class="level" data-level="alta-ti">
+          <button class="level-header" id="header-alta-ti" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-ti">
+            <div class="title"><span class="hl">Alta Administração</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-ti">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧠</div>
+                    <div class="role-meta">
+                      <b>CTO — Chief Technology Officer</b>
+                      <span>Diretor de Tecnologia</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Tecnologia & inovação</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar estratégias tecnológicas, arquitetura e inovação digital.</p>
+                  <p><strong>Exemplo:</strong> Aprovar roadmap de modernização tecnológica e iniciativas de IA.</p>
+                  <p class="small">Interface com produto e negócios.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🔒</div>
+                    <div class="role-meta">
+                      <b>CISO — Chief Information Security Officer</b>
+                      <span>Diretor de Segurança da Informação</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Segurança</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Definir políticas de segurança, proteção de dados e resposta a incidentes.</p>
+                  <p><strong>Exemplo:</strong> Conduzir teste de invasão (pentest) e aprovar plano de remediação.</p>
+                  <p class="small">Alta prioridade regulatória e reputacional.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📡</div>
+                    <div class="role-meta">
+                      <b>CIO — Chief Information Officer</b>
+                      <span>Diretor de Informações / TI</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Infra & serviços</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar operações de TI, infra, suporte e contratos de serviços.</p>
+                  <p><strong>Exemplo:</strong> Migrar infra para nuvem e gerenciar SLA de fornecedores.</p>
+                  <p class="small">Foco em disponibilidade e continuidade.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-ti">
+          <button class="level-header" id="header-diretoria-ti" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-ti">
+            <div class="title"><span class="hl">Diretoria / Gerência</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-ti">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🛠️</div>
+                    <div class="role-meta">
+                      <b>Head de Engenharia</b>
+                      <span>Head of Engineering</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Plataformas & produto</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar times de desenvolvimento e priorizar entregas técnicas.</p>
+                  <p><strong>Exemplo:</strong> Definir arquitetura de microsserviços e roadmap de APIs.</p>
+                  <p class="small">Interface forte com produto e CTO.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🖧</div>
+                    <div class="role-meta">
+                      <b>Gerente de Infraestrutura</b>
+                      <span>Infrastructure Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Redes & servidores</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar redes, servidores, backups e disponibilidade.</p>
+                  <p><strong>Exemplo:</strong> Implementar política de backup e DR (disaster recovery).</p>
+                  <p class="small">Operação 24/7 em alguns setores críticos.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📊</div>
+                    <div class="role-meta">
+                      <b>Head de Data / BI</b>
+                      <span>Head of Data</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Dados & insights</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Estruturar estratégia de dados, BI e governança de dados.</p>
+                  <p><strong>Exemplo:</strong> Implantar data lake e dashboards de desempenho comercial.</p>
+                  <p class="small">Suporte a decisões estratégicas com dados.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-ti">
+          <button class="level-header" id="header-oper-ti" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-ti">
+            <div class="title"><span class="hl">Supervisão / Operacional</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-ti">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">💡</div>
+                    <div class="role-meta">
+                      <b>Desenvolvedor / Engenheiro de Software</b>
+                      <span>Developer / Software Engineer</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Build & deploy</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Desenvolver funcionalidades, corrigir bugs e evoluir produto.</p>
+                  <p><strong>Exemplo:</strong> Entregar sprint com integração CI/CD e testes automatizados.</p>
+                  <p class="small">Trabalha com backlog do produto e QA.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">⚙️</div>
+                    <div class="role-meta">
+                      <b>DevOps / SRE</b>
+                      <span>DevOps / Site Reliability Engineer</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Disponibilidade</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Automação, monitoramento e manutenção de pipelines e infra.</p>
+                  <p><strong>Exemplo:</strong> Reduzir MTTR e melhorar observabilidade do sistema.</p>
+                  <p class="small">Foco em confiabilidade e escalabilidade.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🛡️</div>
+                    <div class="role-meta">
+                      <b>Analista de Segurança da Informação</b>
+                      <span>InfoSec Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Proteção & controles</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Monitorar vulnerabilidades e conduzir resposta a incidentes.</p>
+                  <p><strong>Exemplo:</strong> Investigar incidente de segurança e aplicar correções.</p>
+                  <p class="small">Trabalha com auditoria e compliance.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="operacoes" aria-labelledby="op-title">
+      <button class="sector-header" id="header-op" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-op">
+        <div class="left">
+          <span class="icon-sector">🏭</span>
+          <div>
+            <h3 id="op-title">Operações & Produção</h3>
+            <p>Processos operacionais, produção, controle de qualidade e manutenção.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-op">
+        <div class="level" data-level="alta-op">
+          <button class="level-header" id="header-alta-op" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-op">
+            <div class="title"><span class="hl">Alta Administração / Direção</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-op">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🚚</div>
+                    <div class="role-meta">
+                      <b>CSCO — Chief Supply Chain Officer</b>
+                      <span>Diretor da Cadeia de Suprimentos</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Supply chain</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Coordenar cadeia de suprimentos, logística e produção integrada.</p>
+                  <p><strong>Exemplo:</strong> Alinhar fornecedores críticos e plano de contingência de supply.</p>
+                  <p class="small">Essencial em empresas com operações físicas.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🏭</div>
+                    <div class="role-meta">
+                      <b>Diretor de Produção</b>
+                      <span>Production Director</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Output & qualidade</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar planejamento de capacidade e qualidade na linha de produção.</p>
+                  <p><strong>Exemplo:</strong> Aumentar OEE (Overall Equipment Effectiveness) e reduzir refugo.</p>
+                  <p class="small">Relaciona-se com Engenharia e Manutenção.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-op">
+          <button class="level-header" id="header-diretoria-op" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-op">
+            <div class="title"><span class="hl">Gerência / Supervisão</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-op">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧩</div>
+                    <div class="role-meta">
+                      <b>Gerente de Produção</b>
+                      <span>Production Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Planejamento</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Planejar escala, comandar chão de fábrica e KPI de produção.</p>
+                  <p><strong>Exemplo:</strong> Ajustar linha para pico sazonal e gerenciar horas extras.</p>
+                  <p class="small">Foco em eficiência operacional.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🔧</div>
+                    <div class="role-meta">
+                      <b>Supervisor de Manutenção</b>
+                      <span>Maintenance Supervisor</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Manutenção preventiva</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar equipe de manutenção e planos preventivos.</p>
+                  <p><strong>Exemplo:</strong> Reduzir paradas não programadas através de manutenção preditiva.</p>
+                  <p class="small">Opera próximo a produção e engenharia.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">✅</div>
+                    <div class="role-meta">
+                      <b>Analista de Qualidade (QC)</b>
+                      <span>Quality Control Analyst</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Controle de qualidade</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Realizar inspeções e assegurar conformidade de produto.</p>
+                  <p><strong>Exemplo:</strong> Estabelecer checkpoints e reduzir custo de não-conformidade.</p>
+                  <p class="small">Trabalha com indicadores e auditorias internas.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-oper">
+          <button class="level-header" id="header-oper-oper" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-oper">
+            <div class="title"><span class="hl">Nível Operacional</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-oper">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">👨‍🏭</div>
+                    <div class="role-meta">
+                      <b>Operador de Produção / Técnico</b>
+                      <span>Operator / Technician</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Execução de rotina</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Operar máquinas, seguir instruções e manter padrão de produção.</p>
+                  <p><strong>Exemplo:</strong> Cumprir metas diárias e reportar desvios de processo.</p>
+                  <p class="small">Base da cadeia produtiva.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📦</div>
+                    <div class="role-meta">
+                      <b>Auxiliar de Produção</b>
+                      <span>Production Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Suporte operacional</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Apoiar linha em atividades auxiliares (embalagem, separação).</p>
+                  <p><strong>Exemplo:</strong> Preparar materiais e auxiliar na montagem de kits.</p>
+                  <p class="small">Função tática e de suporte direto.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="comercial" aria-labelledby="com-title">
+      <button class="sector-header" id="header-com" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-com">
+        <div class="left">
+          <span class="icon-sector">🤝</span>
+          <div>
+            <h3 id="com-title">Comercial & Vendas</h3>
+            <p>Estratégia comercial, canais, contas e relacionamento com cliente.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-com">
+        <div class="level" data-level="alta-com">
+          <button class="level-header" id="header-alta-com" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-com">
+            <div class="title"><span class="hl">Alta Administração</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-com">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📌</div>
+                    <div class="role-meta">
+                      <b>CBO — Chief Business Officer / Diretor Comercial</b>
+                      <span>Diretor de Negócios</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Estratégia comercial</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Definir estratégia comercial, preços e canais.</p>
+                  <p><strong>Exemplo:</strong> Aprovar parcerias estratégicas e modelo de distribuição.</p>
+                  <p class="small">Coordena vendas, pré-venda e key accounts.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧾</div>
+                    <div class="role-meta">
+                      <b>Head of Sales</b>
+                      <span>Diretor de Vendas</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Resultados comerciais</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Liderar equipe de vendas, metas e estratégias de penetração.</p>
+                  <p><strong>Exemplo:</strong> Criar plano de incentivos e metas por região.</p>
+                  <p class="small">Interface forte com marketing e produto.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-com">
+          <button class="level-header" id="header-diretoria-com" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-com">
+            <div class="title"><span class="hl">Gerência / Supervisão</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-com">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📁</div>
+                    <div class="role-meta">
+                      <b>Gerente de Contas / KAM</b>
+                      <span>Key Account Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Relacionamento</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar clientes estratégicos, renovar contratos e expandir negócios.</p>
+                  <p><strong>Exemplo:</strong> Negociar contrato anual com cliente-chave e propor upsell.</p>
+                  <p class="small">Foco em retenção e crescimento de contas.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📊</div>
+                    <div class="role-meta">
+                      <b>Supervisor de Vendas</b>
+                      <span>Sales Supervisor</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Execução de metas</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Acompanhar performance da equipe e garantir atingimento de KPIs.</p>
+                  <p><strong>Exemplo:</strong> Reforçar ações em áreas com baixo desempenho e treinar vendedores.</p>
+                  <p class="small">Ligação direta com gerência comercial.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">☎️</div>
+                    <div class="role-meta">
+                      <b>SDR / Pré-vendas</b>
+                      <span>Sales Development Representative</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Prospecção</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerar leads qualificados para os closers da equipe comercial.</p>
+                  <p><strong>Exemplo:</strong> Contatar leads e agendar reuniões para executivos de contas.</p>
+                  <p class="small">Métricas: leads qualificados e taxa de conversão para demo.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-com">
+          <button class="level-header" id="header-oper-com" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-com">
+            <div class="title"><span class="hl">Operacional / Assistência</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-com">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🧑‍💼</div>
+                    <div class="role-meta">
+                      <b>Representante / Vendedor</b>
+                      <span>Sales Representative</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Fechamento</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Realizar prospecção ativa, negociações e fechamento de vendas.</p>
+                  <p><strong>Exemplo:</strong> Fechar cota mensal com novos clientes e atingir metas.</p>
+                  <p class="small">Relação próxima com clientes e pós-venda.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🗂️</div>
+                    <div class="role-meta">
+                      <b>Assistente Comercial</b>
+                      <span>Commercial Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Suporte vendas</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Preparar propostas, controlar pipeline e dar suporte administrativo à equipe de vendas.</p>
+                  <p><strong>Exemplo:</strong> Gerar propostas comerciais e acompanhar status de pedidos.</p>
+                  <p class="small">Importante para fluxo de vendas operacional.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sector" data-sector="logistica" aria-labelledby="lg-title">
+      <button class="sector-header" id="header-lg" onclick="toggleSector(this)" role="button" aria-expanded="false" aria-controls="content-lg">
+        <div class="left">
+          <span class="icon-sector">🚛</span>
+          <div>
+            <h3 id="lg-title">Logística & Suprimentos</h3>
+            <p>Gestão de compras, fornecedores, armazenagem e distribuição.</p>
+          </div>
+        </div>
+        <div><strong class="toggle-text">Ver setor</strong></div>
+      </button>
+
+      <div class="levels" id="content-lg">
+        <div class="level" data-level="alta-log">
+          <button class="level-header" id="header-alta-log" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-alta-log">
+            <div class="title"><span class="hl">Direção & Estratégia</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-alta-log">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📦</div>
+                    <div class="role-meta">
+                      <b>Diretor de Suprimentos / Supply Chain</b>
+                      <span>Supply Chain Director</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Compras estratégicas</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Definir estratégia de compras, políticas de fornecedores e negociação de contrato.</p>
+                  <p><strong>Exemplo:</strong> Consolidar compras para reduzir custo por volume e gerenciar risco fornecedor.</p>
+                  <p class="small">Relaciona-se com produção e finanças.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🗺️</div>
+                    <div class="role-meta">
+                      <b>Diretor de Logística</b>
+                      <span>Logistics Director</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Distribuição & transporte</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Planejar redes de distribuição, last mile e gestão de transportadoras.</p>
+                  <p><strong>Exemplo:</strong> Redesenhar malha logística para reduzir prazo e custo.</p>
+                  <p class="small">Impacto direto em nível de serviço ao cliente.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="diretoria-log">
+          <button class="level-header" id="header-diretoria-log" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-diretoria-log">
+            <div class="title"><span class="hl">Gerência / Coordenação</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-diretoria-log">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🛒</div>
+                    <div class="role-meta">
+                      <b>Gerente de Compras</b>
+                      <span>Purchasing Manager</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Negociação</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Negociar com fornecedores, gerir contratos e assegurar lead times.</p>
+                  <p><strong>Exemplo:</strong> Implementar avaliação de fornecedores e renegociar SLA.</p>
+                  <p class="small">Suporte a produção e operações.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">🏷️</div>
+                    <div class="role-meta">
+                      <b>Coordenador de Armazém</b>
+                      <span>Warehouse Coordinator</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Inventário & expedição</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Gerenciar recebimento, armazenagem e expedição.</p>
+                  <p><strong>Exemplo:</strong> Reduzir divergências de inventário e otimizar picking.</p>
+                  <p class="small">Importante para precisão logística.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        <div class="level" data-level="oper-log">
+          <button class="level-header" id="header-oper-log" onclick="toggleLevel(this)" role="button" aria-expanded="false" aria-controls="grid-oper-log">
+            <div class="title"><span class="hl">Operacional</span><h4></h4></div>
+            <div class="toggle-icon">▶</div>
+          </button>
+          <div class="card-grid-wrapper" id="grid-oper-log">
+            <div class="card-grid">
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📑</div>
+                    <div class="role-meta">
+                      <b>Assistente de Compras</b>
+                      <span>Purchasing Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Pedidos & follow-up</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Emitir pedidos, acompanhar entregas e controlar documentos.</p>
+                  <p><strong>Exemplo:</strong> Monitorar entregas atrasadas e acionar fornecedor.</p>
+                  <p class="small">Rotina de suporte à operação.</p>
+                </div>
+              </article>
+
+              <article class="role-card" tabindex="0" onclick="toggleCard(this)" aria-expanded="false">
+                <div class="role-top">
+                  <div class="role-left">
+                    <div class="role-icon">📦</div>
+                    <div class="role-meta">
+                      <b>Auxiliar de Almoxarifado</b>
+                      <span>Warehouse Assistant</span>
+                    </div>
+                  </div>
+                  <div class="role-short">Movimentação</div>
+                </div>
+                <div class="role-details">
+                  <p><strong>Função:</strong> Receber, armazenar e preparar materiais para expedição.</p>
+                  <p><strong>Exemplo:</strong> Conferir nota fiscal e posicionar itens no estoque.</p>
+                  <p class="small">Atividade prática e repetitiva.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:40px">
+      <div style="background:#fff;border-radius:12px;padding:20px;border:1px solid var(--neutral);box-shadow:var(--shadow)">
+        <h3 style="margin:0 0 10px 0;color:var(--secondary-text);font-weight:600;font-size:1.3rem;">Instruções de Navegação</h3>
+        <p style="margin:0;color:var(--muted);font-size:0.95rem;">• Clique no cabeçalho do <strong>Setor</strong> (ex: Administração) para abrir/fechar todos os níveis daquele setor.<br>• Dentro do setor, clique no cabeçalho do <strong>Nível Hierárquico</strong> (ex: Alta Administração) para mostrar/ocultar todos os cards daquele nível.<br>• Clique em um <strong>Card de Cargo</strong> (ex: CEO) para expandir e ver a <strong>Função</strong> e o <strong>Exemplo</strong> de ação.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer" role="contentinfo">
+    © 2025 Silvanio Gois - Todos os direitos reservados |
+    <a href="https://www.silvaniogois.com.br/" target="_blank" rel="noopener">Ir ao Site</a>
+  </footer>
+
+  <script>
+    /* Javascript para Interatividade (Toggle) - Atualizado para transições suaves e ARIA */
+
+    /* Toggle sector open/close (show levels inside) */
+    function toggleSector(button) {
+      const sector = button.closest('.sector');
+      const levels = document.getElementById(button.getAttribute('aria-controls'));
+      if (!levels) return;
+
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      // 1. Alterna o estado ARIA no botão
+      button.setAttribute('aria-expanded', !isExpanded);
+      
+      // 2. Alterna a classe no elemento pai para o CSS gerenciar a transição
+      sector.classList.toggle('sector-open');
+      
+      // 3. Gerenciamento do primeiro nível: Se o setor estiver abrindo, abre o primeiro nível.
+      if (!isExpanded) {
+        // Encontra o primeiro botão de nível
+        const firstLevelButton = levels.querySelector('.level-header');
+        if (firstLevelButton) {
+          // Garante que o primeiro nível tenha a classe de abertura para aparecer
+          const firstLevel = firstLevelButton.closest('.level');
+          if (firstLevel && firstLevelButton.getAttribute('aria-expanded') !== 'true') {
+              firstLevelButton.setAttribute('aria-expanded', 'true');
+              firstLevel.classList.add('level-open');
+          }
+        }
+      }
+    }
+
+    /* Toggle level: show/hide all cards in that level */
+    function toggleLevel(button) {
+      const level = button.closest('.level');
+      const content = document.getElementById(button.getAttribute('aria-controls'));
+      if (!level || !content) return;
+      
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      // 1. Alterna o estado ARIA no botão
+      button.setAttribute('aria-expanded', !isExpanded);
+      
+      // 2. Alterna a classe no elemento pai para o CSS gerenciar a transição
+      level.classList.toggle('level-open');
+    }
+
+    /* Toggle individual card open/close */
+    function toggleCard(card) {
+      const isExpanded = card.getAttribute('aria-expanded') === 'true';
+
+      // Fecha todos os outros cartões abertos no mesmo grid para manter a clareza
+      card.closest('.card-grid').querySelectorAll('.role-card[aria-expanded="true"]').forEach(openCard => {
+        if (openCard !== card) {
+          openCard.setAttribute('aria-expanded', 'false');
+        }
+      });
+      
+      // Alterna o estado do cartão clicado
+      card.setAttribute('aria-expanded', !isExpanded);
+    }
+
+    /* Accessibility: allow keyboard Enter/Space to toggle element when focused */
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const active = document.activeElement;
+        if (active && (active.classList.contains('sector-header') || active.classList.contains('level-header') || active.classList.contains('role-card'))) {
+          e.preventDefault();
+          // Se for um botão de setor/nível, usa o toggle de setor/nível
+          if (active.classList.contains('sector-header')) {
+            toggleSector(active);
+          } else if (active.classList.contains('level-header')) {
+            toggleLevel(active);
+          } else if (active.classList.contains('role-card')) {
+            // Se for um card, usa o toggle de card
+            toggleCard(active);
+          }
+        }
+      }
+    });
+    
+    /* Estado inicial: todos os setores fechados ao carregar a página */
+    document.addEventListener('DOMContentLoaded', function(){
+      // Isso é tratado pelo CSS com max-height: 0 no .levels e .card-grid-wrapper
+      // mas garantimos que a classe .sector-open não esteja aplicada inicialmente.
+      document.querySelectorAll('.sector').forEach(sector => {
+        sector.classList.remove('sector-open');
+        sector.querySelector('.sector-header').setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>
